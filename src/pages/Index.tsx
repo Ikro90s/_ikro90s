@@ -13,20 +13,25 @@ import { ProjectsCarousel } from "@/components/ProjectsCarousel";
 import { TechStack } from "@/components/TechStack";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { ParallaxBackground } from "@/components/ParallaxBackground";
+import { ThemeProvider } from "next-themes";
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <ProjectsCarousel />
-        <TechStack />
-        <ContactSection />
-      </main>
-      <Footer />
-    </div>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+      <div className="min-h-screen bg-background">
+        <ParallaxBackground />
+        <Header />
+        <main>
+          <HeroSection />
+          <AboutSection />
+          <ProjectsCarousel />
+          <TechStack />
+          <ContactSection />
+        </main>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 };
 

@@ -6,8 +6,9 @@
  * 
  * @component
  */
-import { Mail, MapPin, Phone, Github, Linkedin, Twitter, Instagram } from "lucide-react";
+import { Mail, MapPin, Phone, Github, Linkedin, Instagram, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 interface SocialLink {
   name: string;
@@ -25,7 +26,7 @@ interface ContactInfo {
 const socialLinks: SocialLink[] = [
   { name: "GitHub", url: "https://github.com", icon: Github },
   { name: "LinkedIn", url: "https://linkedin.com", icon: Linkedin },
-  { name: "Twitter", url: "https://twitter.com", icon: Twitter },
+  { name: "WhatsApp", url: "https://wa.me/5500000000000", icon: MessageCircle },
   { name: "Instagram", url: "https://instagram.com", icon: Instagram },
 ];
 
@@ -46,7 +47,13 @@ export const ContactSection = () => {
 
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <p className="text-primary font-medium text-sm tracking-wider uppercase mb-4">
             Contato
           </p>
@@ -59,18 +66,34 @@ export const ContactSection = () => {
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Estou disponível para novos projetos e oportunidades. Entre em contato!
           </p>
-        </div>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 gap-12 max-w-4xl mx-auto">
           {/* Contact Info */}
-          <div className="space-y-8">
+          <motion.div 
+            className="space-y-8"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             <h3 className="text-xl font-semibold">Informações de Contato</h3>
             <div className="space-y-6">
-              {contactInfo.map((info) => (
-                <div key={info.label} className="flex items-center gap-4">
-                  <div className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-accent-foreground/20">
+              {contactInfo.map((info, index) => (
+                <motion.div 
+                  key={info.label} 
+                  className="flex items-center gap-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <motion.div 
+                    className="p-3 rounded-xl bg-gradient-to-br from-primary/20 to-accent-foreground/20"
+                    whileHover={{ scale: 1.1 }}
+                  >
                     <info.icon className="h-5 w-5 text-primary" />
-                  </div>
+                  </motion.div>
                   <div>
                     <p className="text-sm text-muted-foreground">{info.label}</p>
                     {info.href ? (
@@ -84,34 +107,49 @@ export const ContactSection = () => {
                       <p className="font-medium">{info.value}</p>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Social Links */}
-          <div className="space-y-8">
+          <motion.div 
+            className="space-y-8"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             <h3 className="text-xl font-semibold">Redes Sociais</h3>
             <p className="text-muted-foreground">
               Me siga nas redes sociais para acompanhar meus trabalhos e novidades.
             </p>
             <div className="flex flex-wrap gap-4">
-              {socialLinks.map((social) => (
-                <Button
+              {socialLinks.map((social, index) => (
+                <motion.div 
                   key={social.name}
-                  variant="outline"
-                  size="lg"
-                  className="gap-3 border-border/50 hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
-                  asChild
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <a href={social.url} target="_blank" rel="noopener noreferrer">
-                    <social.icon className="h-5 w-5" />
-                    {social.name}
-                  </a>
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="gap-3 border-border/50 hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
+                    asChild
+                  >
+                    <a href={social.url} target="_blank" rel="noopener noreferrer">
+                      <social.icon className="h-5 w-5" />
+                      {social.name}
+                    </a>
+                  </Button>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

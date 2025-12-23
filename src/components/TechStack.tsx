@@ -16,6 +16,7 @@ import {
   Terminal,
   Layers
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface Technology {
   name: string;
@@ -39,7 +40,13 @@ export const TechStack = () => {
     <section id="tech" className="py-24 bg-card/30">
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <p className="text-primary font-medium text-sm tracking-wider uppercase mb-4">
             Habilidades
           </p>
@@ -52,28 +59,35 @@ export const TechStack = () => {
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Ferramentas e tecnologias que fazem parte do meu dia a dia como desenvolvedor
           </p>
-        </div>
+        </motion.div>
 
         {/* Tech Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
           {technologies.map((tech, index) => (
-            <div
+            <motion.div
               key={tech.name}
-              className="group relative p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group relative p-6 rounded-2xl bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 hover:shadow-lg"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
             >
               {/* Gradient background on hover */}
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/5 to-accent-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               
               <div className="relative flex flex-col items-center gap-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br ${tech.color} bg-opacity-10`}>
+                <motion.div 
+                  className={`p-3 rounded-xl bg-gradient-to-br ${tech.color} bg-opacity-10`}
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                >
                   <tech.icon className="h-8 w-8 text-primary-foreground" />
-                </div>
+                </motion.div>
                 <span className="font-medium text-sm text-center group-hover:text-primary transition-colors">
                   {tech.name}
                 </span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
