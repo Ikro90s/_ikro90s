@@ -6,6 +6,7 @@
  * @component
  */
 import { Briefcase, GraduationCap, MapPin, Calendar } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface InfoItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -26,7 +27,13 @@ export const AboutSection = () => {
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
             <p className="text-primary font-medium text-sm tracking-wider uppercase mb-4">
               Sobre Mim
             </p>
@@ -36,12 +43,18 @@ export const AboutSection = () => {
                 da minha história
               </span>
             </h2>
-          </div>
+          </motion.div>
 
           {/* Content */}
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Text */}
-            <div className="space-y-6">
+            <motion.div 
+              className="space-y-6"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
               <p className="text-muted-foreground leading-relaxed">
                 Sou um desenvolvedor apaixonado por tecnologia e inovação. Minha jornada 
                 na programação começou há alguns anos e desde então venho me dedicando 
@@ -57,19 +70,27 @@ export const AboutSection = () => {
                 contribuir para projetos open source e compartilhar conhecimento 
                 com a comunidade.
               </p>
-            </div>
+            </motion.div>
 
             {/* Info Cards */}
             <div className="grid grid-cols-2 gap-4">
-              {infoItems.map((item) => (
-                <div
+              {infoItems.map((item, index) => (
+                <motion.div
                   key={item.label}
                   className="p-5 rounded-2xl bg-background/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all duration-300 group"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
                 >
                   <div className="flex flex-col gap-3">
-                    <div className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-accent-foreground/20 w-fit">
+                    <motion.div 
+                      className="p-2 rounded-lg bg-gradient-to-br from-primary/20 to-accent-foreground/20 w-fit"
+                      whileHover={{ scale: 1.1 }}
+                    >
                       <item.icon className="h-5 w-5 text-primary" />
-                    </div>
+                    </motion.div>
                     <div>
                       <p className="text-xs text-muted-foreground uppercase tracking-wider">
                         {item.label}
@@ -79,7 +100,7 @@ export const AboutSection = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

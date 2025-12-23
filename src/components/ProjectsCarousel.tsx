@@ -2,10 +2,11 @@
  * ProjectsCarousel Component
  * 
  * A carousel showcasing portfolio projects with smooth transitions.
- * Uses Embla Carousel for touch-friendly navigation.
+ * Uses Embla Carousel for touch-friendly navigation with autoplay.
  * 
  * @component
  */
+import { useEffect, useCallback } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import {
   Carousel,
@@ -13,9 +14,12 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 interface Project {
   id: number;
@@ -67,6 +71,18 @@ const projects: Project[] = [
 ];
 
 export const ProjectsCarousel = () => {
+  const [api, setApi] = useState<CarouselApi>();
+
+  useEffect(() => {
+    if (!api) return;
+
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [api]);
+
   return (
     <section id="projects" className="py-24 relative">
       {/* Background decoration */}
@@ -77,7 +93,13 @@ export const ProjectsCarousel = () => {
 
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <p className="text-primary font-medium text-sm tracking-wider uppercase mb-4">
             Portfólio
           </p>
@@ -90,10 +112,11 @@ export const ProjectsCarousel = () => {
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Uma seleção dos meus trabalhos mais recentes e relevantes
           </p>
-        </div>
+        </motion.div>
 
         {/* Carousel */}
         <Carousel
+          setApi={setApi}
           opts={{
             align: "start",
             loop: true,
@@ -101,56 +124,67 @@ export const ProjectsCarousel = () => {
           className="w-full max-w-5xl mx-auto"
         >
           <CarouselContent className="-ml-4">
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <CarouselItem key={project.id} className="pl-4 md:basis-1/2 lg:basis-1/2">
-                <Card className="bg-card/50 backdrop-blur-sm border-border/50 overflow-hidden group hover:border-primary/50 transition-all duration-300 h-full">
-                  {/* Project Image Placeholder */}
-                  <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent-foreground/20 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <span className="text-muted-foreground text-sm">Imagem do Projeto</span>
-                  </div>
-                  
-                  <CardContent className="p-6 space-y-4">
-                    <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm line-clamp-2">
-                      {project.description}
-                    </p>
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="bg-card/50 backdrop-blur-sm border-border/50 overflow-hidden group hover:border-primary/50 transition-all duration-300 h-full">
+                    {/* Project Image Placeholder */}
+                    <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent-foreground/20 flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <span className="text-muted-foreground text-sm">Imagem do Projeto</span>
+                    </div>
                     
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span 
-                          key={tag}
-                          className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
+                    <CardContent className="p-6 space-y-4">
+                      <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
+                        {project.title}
+                      </h3>
+                      <p className="text-muted-foreground text-sm line-clamp-2">
+                        {project.description}
+                      </p>
+                      
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2">
+                        {project.tags.map((tag) => (
+                          <span 
+                            key={tag}
+                            className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
 
-                    {/* Links */}
-                    <div className="flex gap-3 pt-2">
-                      {project.githubUrl && (
-                        <Button variant="ghost" size="sm" className="gap-2" asChild>
-                          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                            <Github className="h-4 w-4" />
-                            Código
-                          </a>
-                        </Button>
-                      )}
-                      {project.liveUrl && (
-                        <Button variant="ghost" size="sm" className="gap-2" asChild>
-                          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                            <ExternalLink className="h-4 w-4" />
-                            Demo
-                          </a>
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
+                      {/* Links */}
+                      <div className="flex gap-3 pt-2">
+                        {project.githubUrl && (
+                          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Button variant="ghost" size="sm" className="gap-2" asChild>
+                              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                                <Github className="h-4 w-4" />
+                                Código
+                              </a>
+                            </Button>
+                          </motion.div>
+                        )}
+                        {project.liveUrl && (
+                          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                            <Button variant="ghost" size="sm" className="gap-2" asChild>
+                              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="h-4 w-4" />
+                                Demo
+                              </a>
+                            </Button>
+                          </motion.div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </CarouselItem>
             ))}
           </CarouselContent>

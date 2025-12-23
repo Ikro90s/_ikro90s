@@ -7,9 +7,11 @@
  * @component
  */
 import { useState } from "react";
-import { Menu, X, Home, Briefcase, Code, Mail, User } from "lucide-react";
+import { Menu, Home, Briefcase, Code, Mail, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { motion } from "framer-motion";
 
 interface NavItem {
   label: string;
@@ -35,61 +37,83 @@ export const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+    <motion.header 
+      className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border"
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="container mx-auto px-6 py-4">
         <nav className="flex items-center justify-between">
           {/* Logo */}
-          <a 
+          <motion.a 
             href="#home" 
             className="text-xl font-bold bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
-            Portfolio
-          </a>
+            Ikro90s
+          </motion.a>
 
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <button
+            {navItems.map((item, index) => (
+              <motion.li 
+                key={item.href}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <motion.button
                   onClick={() => scrollToSection(item.href)}
                   className="text-muted-foreground hover:text-primary transition-colors duration-300 text-sm font-medium"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {item.label}
-                </button>
-              </li>
+                </motion.button>
+              </motion.li>
             ))}
           </ul>
 
-          {/* Mobile Navigation */}
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72 bg-card">
-              <div className="flex flex-col gap-8 mt-8">
-                <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">
-                  Menu
-                </span>
-                <ul className="flex flex-col gap-4">
-                  {navItems.map((item) => (
-                    <li key={item.href}>
-                      <button
-                        onClick={() => scrollToSection(item.href)}
-                        className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors duration-300 text-base font-medium w-full p-3 rounded-lg hover:bg-accent"
-                      >
-                        <item.icon className="h-5 w-5" />
-                        {item.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            
+            {/* Mobile Navigation */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                  <Button variant="ghost" size="icon">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </motion.div>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-72 bg-card">
+                <div className="flex flex-col gap-8 mt-8">
+                  <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">
+                    Menu
+                  </span>
+                  <ul className="flex flex-col gap-4">
+                    {navItems.map((item) => (
+                      <li key={item.href}>
+                        <motion.button
+                          onClick={() => scrollToSection(item.href)}
+                          className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors duration-300 text-base font-medium w-full p-3 rounded-lg hover:bg-accent"
+                          whileHover={{ scale: 1.05, x: 10 }}
+                          whileTap={{ scale: 0.95 }}
+                        >
+                          <item.icon className="h-5 w-5" />
+                          {item.label}
+                        </motion.button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </nav>
       </div>
-    </header>
+    </motion.header>
   );
 };
